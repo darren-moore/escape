@@ -17,12 +17,9 @@ public class PlayerAnimation : MonoBehaviour
     {
         movement.x = Input.GetAxisRaw("Horizontal"); 
         movement.y = Input.GetAxisRaw("Vertical"); 
-        if (movement.x != 0 || movement.y != 0) {
-            animator.SetBool("Moving", true); 
-            animator.SetFloat("xInput", movement.normalized.x); 
-            animator.SetFloat("yInput", movement.normalized.y); 
-        } else {
-            animator.SetBool("Moving", false); 
-        }
+
+        animator.SetFloat("xInput", movement.x); 
+        animator.SetFloat("yInput", movement.y); 
+        animator.SetFloat("Speed", movement.sqrMagnitude); 
     }
 }
