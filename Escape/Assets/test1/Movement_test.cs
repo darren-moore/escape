@@ -7,7 +7,6 @@ public class Movement_test : MonoBehaviour
     [Header("Player Properties")]
 
     public float moveSpeed = 1;
-    public float decel = 1;
     public float maxSpeed = 20;
     public Rigidbody2D rb;
     public float dashAccel = 10.0f;
@@ -21,6 +20,7 @@ public class Movement_test : MonoBehaviour
     private int state = 0;  // Free state, animation state, stun state, etc. 
     private Vector2 dir = Vector2.zero;
     private float idrag;
+    private float bm;
 
 
     // Start is called before the first frame update
@@ -29,6 +29,7 @@ public class Movement_test : MonoBehaviour
         if (rb == null && this.gameObject.GetComponent<Rigidbody2D>())
             rb = this.gameObject.GetComponent<Rigidbody2D>();
         idrag = rb.drag;
+        bm = moveSpeed;
     }
 
     // Update is called once per frame
@@ -42,47 +43,43 @@ public class Movement_test : MonoBehaviour
         float y = Input.GetAxis("Vertical");
 
         dir = new Vector2(0, 0);
-        /*
-        if ((Input.GetKeyDown("w") || Input.GetKey("w")) && !Input.GetKey("s"))
-            dir.y = 1;
-        if ((Input.GetKeyDown("d") || Input.GetKey("d")) && !Input.GetKey("a"))
-            dir.x = 1;
-        if ((Input.GetKeyDown("s") || Input.GetKey("s")) && !Input.GetKey("w"))
-            dir.y = -1;
-        if ((Input.GetKeyDown("a") || Input.GetKey("a")) && !Input.GetKey("d"))
-            dir.x = -1;*/
 
         rb.velocity = new Vector2(moveSpeed * x, moveSpeed * y);
         rb.drag = idrag;
 
         if (dir == Vector2.zero && state == 0)   
         {
-            //rb.drag = 20;
+            rb.drag = 20;
         }
 
         if (Vector2.Dot(rb.velocity, dir) <= 0 && rb.velocity.sqrMagnitude > maxSpeed * maxSpeed || rb.velocity.sqrMagnitude <= maxSpeed * maxSpeed)
         {
-            rb.velocity.Set(moveSpeed * x, moveSpeed * y);
-            rb.drag = idrag;
+            if (state == 0)
+            {
+                rb.velocity.Set(moveSpeed * x, moveSpeed * y);
+                rb.drag = idrag;
+            }
         }
 
         if (Input.GetKey(Inputs[4]))
+        {
             Dash();
+        }
 
     }
 
     private void Dash() //WIP
     {
-        if (Time.time - 2 > dashTi && rb.velocity.magnitude > 0)
+        if (Time.time - dashCooldown > dashTi || state == 1 && Time.time - dashDuration <= dashTi)
         {
-            dashTi = Time.time;
+            if (state == 0) dashTi = Time.time;
             if (Time.time - dashDuration <= dashTi)
             {
-                rb.AddForce(dashAccel * rb.velocity.normalized, ForceMode2D.Impulse);
                 if (state == 0)
                     state = 1;
+                rb.AddForce(dashAccel * rb.velocity.normalized, ForceMode2D.Impulse);
             }
-            else if (Time.time - dashDuration > dashTi)
+            else if (state == 1 && Time.time - dashDuration > dashTi)
                 state = 0;
                 
         }
