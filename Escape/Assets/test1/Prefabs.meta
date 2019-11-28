@@ -1,5 +1,9 @@
 fileFormatVersion: 2
+<<<<<<< HEAD:Escape/Assets/test1/Prefabs.meta
 guid: ddf9fcbb61002c34cae3c98587904ec5
+=======
+guid: 220bae86fd8cb154b954e77b26f2ff24
+>>>>>>> master:Escape/Assets/Prefabs.meta
 folderAsset: yes
 DefaultImporter:
   externalObjects: {}
