@@ -1,0 +1,80 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &7259594239819781542
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7259594239819781543}
+  - component: {fileID: 7259594239819781540}
+  - component: {fileID: 7259594239819781541}
+  m_Layer: 0
+  m_Name: GameManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7259594239819781543
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7259594239819781542}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 2, y: 3, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7259594239819781540
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7259594239819781542}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 36863f7813d5058468e8447ace336e42, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  startRoomIndex: 0
+  floorTiles:
+  - {fileID: 3631423498031765332, guid: 3d02ae40cef0e3d41a58ea3564d0018a, type: 3}
+  wallTiles:
+  - {fileID: 1163660733465294968, guid: 22c44f05f303c4642aa78f857a7f61b4, type: 3}
+  - {fileID: 8955278773922644746, guid: cd9d9e098cc253846a14ea3042d26dad, type: 3}
+  - {fileID: 4591668533025208246, guid: 77e04b9216f69c545b3340b1d728e997, type: 3}
+  - {fileID: 3813611868659212536, guid: 9ad4b0c94fa4d184c88316299d0589d2, type: 3}
+  - {fileID: 1231358192410807588, guid: cf015ca1b61bb1c4295882ce21065cf9, type: 3}
+  - {fileID: 1091920886717700859, guid: e440b752aea60634d865f527928110be, type: 3}
+  - {fileID: 8418010090923546841, guid: 415349c8fe76e0945aa41aa88fb3341d, type: 3}
+  - {fileID: 1797392538373993602, guid: 49558d5c7e692884882b92179f3ceda0, type: 3}
+  startRoomCol: 
+  stack: []
+  currentRoom:
+    position: {x: 0, y: 0}
+    walls: 
+    visited: 0
+    room: 0
+  currentRoomIndex: 0
+  room: 0
+--- !u!114 &7259594239819781541
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7259594239819781542}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4bffcc34bafb3db448634e18a6457ee7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  boardScript: {fileID: 0}
