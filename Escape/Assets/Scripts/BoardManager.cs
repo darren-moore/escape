@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Random = UnityEngine.Random;
+using System.Linq;
 
 public class BoardManager : MonoBehaviour {
 
@@ -138,28 +139,46 @@ public class BoardManager : MonoBehaviour {
                 board[x, y].transform.SetParent(boardHolder);
 
                 // Iterate through each tile in Cell.
-                for (int i = 0; i < 8; i++) {
-                    for (int j = 0; j < 9; j++) {
-
-                        //if (i >= 2 && i <= 5 && j >= 2 && j <= 5)
-                            //DrawFloor(x, y, i, j);
-
+                for (int i = 0; i < 8; i++)
+                    for (int j = 0; j < 9; j++)
                         if (i < 2 || i > 5 || j < 3 || j > 5)
-                            DrawWalls(x, y, i, j);
-                    }
-                } 
+                            DrawWall(x, y, i, j);
+
+                DrawFloor(x, y);
             }
         }
     }
 
-    void DrawFloor(int x, int y, int i, int j) {
+    void DrawFloor(int x, int y) {
 
-        GameObject floorTile = floorTiles[Random.Range(0, floorTiles.Length)];
-        GameObject instance = Instantiate(floorTile, new Vector2(x * 8 + i, y * 9 + j), Quaternion.identity) as GameObject;
-        instance.transform.SetParent(board[x, y].transform);
+        TileInBox(x, y, 4, 4, 2, 3);
+
+        bool[] directions = GetDirection(x, y);
+
+        if (directions.Contains(true))
+            DrawHallFloor(x, y, directions);
     }
 
-    void DrawWalls(int x, int y, int i, int j) {
+    void DrawHallFloor(int x, int y, bool[] directions) {
+
+        // North hallway
+        if (directions[0])
+            TileInBox(x, y, 4, 2, 2, 7);
+
+        // West hallway
+        if (directions[1])
+            TileInBox(x, y, 2, 3, 0, 3);
+
+        // East hallway
+        if (directions[2])
+            TileInBox(x, y, 2, 3, 6, 3);
+
+        // South hallway
+        if (directions[3])
+            TileInBox(x, y, 4, 3, 2, 0);
+    }
+
+    void DrawWall(int x, int y, int i, int j) {
 
         GameObject wallTile = null;
 
@@ -287,6 +306,18 @@ public class BoardManager : MonoBehaviour {
                 directions[i] = true;
 
         return directions;
+    }
+
+    void TileInBox(int x, int y, int length, int width, int lengthOffset, int widthOffset) {
+
+        for (int i = 0; i < length; i++) {
+            for (int j = 0; j < width; j++) {
+
+                Vector2 position = new Vector2(x * 8 + i + lengthOffset, y * 9 + j + widthOffset);
+                GameObject floorTile = floorTiles[Random.Range(0, floorTiles.Length)];
+                GameObject instance = Instantiate(floorTile, position, Quaternion.identity) as GameObject;
+            }
+        }
     }
 
     void RemoveWalls(Cell a, Cell b) {
