@@ -80,6 +80,8 @@ public class BoardManager : MonoBehaviour {
 
     private const int Rows = 8;
     private const int Cols = 8;
+    private const int RoomLength = 9;
+    private const int RoomWidth = 8;
 
     public GameObject[] floorTiles;
     public GameObject[] wallTiles;
@@ -135,12 +137,12 @@ public class BoardManager : MonoBehaviour {
             for (int y = 0; y < Rows; y++) {
 
                 board[x, y] = new GameObject("Cell");
-                board[x, y].transform.position = new Vector2(x * Cols + 4, y * Rows + 4.5f);
+                board[x, y].transform.position = new Vector2(x * Cols + RoomWidth / 2, y * Rows + RoomLength / 2);
                 board[x, y].transform.SetParent(boardHolder);
 
                 // Iterate through each tile in Cell.
-                for (int i = 0; i < 8; i++)
-                    for (int j = 0; j < 9; j++)
+                for (int i = 0; i < RoomWidth; i++)
+                    for (int j = 0; j < RoomLength; j++)
                         if (i < 2 || i > 5 || j < 3 || j > 5)
                             DrawWall(x, y, i, j);
 
@@ -292,7 +294,7 @@ public class BoardManager : MonoBehaviour {
         if (wallTile == null)
             return;
 
-        GameObject instance = Instantiate(wallTile, new Vector2(x * 8 + i, y * 9 + j), Quaternion.identity) as GameObject;
+        GameObject instance = Instantiate(wallTile, new Vector2(x * RoomWidth + i, y * RoomLength + j), Quaternion.identity) as GameObject;
         instance.transform.SetParent(board[x, y].transform);
     }
 
@@ -313,9 +315,10 @@ public class BoardManager : MonoBehaviour {
         for (int i = 0; i < length; i++) {
             for (int j = 0; j < width; j++) {
 
-                Vector2 position = new Vector2(x * 8 + i + lengthOffset, y * 9 + j + widthOffset);
+                Vector2 position = new Vector2(x * RoomWidth + i + lengthOffset, y * RoomLength + j + widthOffset);
                 GameObject floorTile = floorTiles[Random.Range(0, floorTiles.Length)];
                 GameObject instance = Instantiate(floorTile, position, Quaternion.identity) as GameObject;
+                instance.transform.SetParent(board[x, y].transform);
             }
         }
     }
