@@ -29,8 +29,8 @@ public class BoardManager : MonoBehaviour {
         public Cell(Cell template) {
 
             this.position = template.position;
-            this.walls = template.walls;
             this.visited = template.visited;
+            this.walls = template.walls;
         }
 
         public List<Cell> GetNeighbours(Cell[,] grid) {
@@ -78,8 +78,8 @@ public class BoardManager : MonoBehaviour {
         }
     }
 
-    private const int Rows = 8;
-    private const int Cols = 8;
+    private const int Rows = 6;
+    private const int Cols = 6;
     private const int RoomLength = 9;
     private const int RoomWidth = 8;
 
@@ -98,7 +98,7 @@ public class BoardManager : MonoBehaviour {
                 grid[i, j] = new Cell(i, j);
     }
 
-    void DrawMaze() {
+    void CreateMaze() {
         
         List<Cell> queue = new List<Cell>();
         Cell currentRoom = grid[0, 0];
@@ -127,7 +127,37 @@ public class BoardManager : MonoBehaviour {
         } while (queue.Count > 0);
     }
 
-    void BoardSetup() {
+    void RemoveWalls(Cell a, Cell b) {
+
+        int colDiff = (int)(a.position.x) - (int)(b.position.x);
+        int rowDiff = (int)(a.position.y) - (int)(b.position.y);
+
+        if (colDiff == 1) {
+
+            a.walls[1] = false;
+            b.walls[2] = false;
+        }
+
+        else if (colDiff == -1) {
+
+            a.walls[2] = false;
+            b.walls[1] = false;
+        }
+
+        if (rowDiff == -1) {
+
+            a.walls[0] = false;
+            b.walls[3] = false;
+        }
+
+        else if (rowDiff == 1) {
+
+            a.walls[3] = false;
+            b.walls[0] = false;
+        }
+    }
+
+    void DrawMaze() {
 
         board = new GameObject[Cols, Rows];
         boardHolder = new GameObject("Board").transform;
@@ -149,35 +179,6 @@ public class BoardManager : MonoBehaviour {
                 DrawFloor(x, y);
             }
         }
-    }
-
-    void DrawFloor(int x, int y) {
-
-        TileInBox(x, y, 4, 4, 2, 3);
-
-        bool[] directions = GetDirection(x, y);
-
-        if (directions.Contains(true))
-            DrawHallFloor(x, y, directions);
-    }
-
-    void DrawHallFloor(int x, int y, bool[] directions) {
-
-        // North hallway
-        if (directions[0])
-            TileInBox(x, y, 4, 2, 2, 7);
-
-        // West hallway
-        if (directions[1])
-            TileInBox(x, y, 2, 3, 0, 3);
-
-        // East hallway
-        if (directions[2])
-            TileInBox(x, y, 2, 3, 6, 3);
-
-        // South hallway
-        if (directions[3])
-            TileInBox(x, y, 4, 3, 2, 0);
     }
 
     void DrawWall(int x, int y, int i, int j) {
@@ -208,11 +209,11 @@ public class BoardManager : MonoBehaviour {
             else
                 wallTile = wallTiles[0];
         }
-            
+
         // North wall
         else if ((i == 2 || i == 4) && j == 6 && !directions[0])
             wallTile = wallTiles[1];
-        
+
         // Northeast corner
         else if (i == 6 && j == 6) {
 
@@ -260,11 +261,11 @@ public class BoardManager : MonoBehaviour {
             else
                 wallTile = wallTiles[4];
         }
-            
+
         // South Wall
         else if ((i == 2 || i == 4) && j == 0 && !directions[3])
             wallTile = wallTiles[5];
-        
+
         // Southwest Corner
         else if (i == 0 && j == 0) {
 
@@ -286,16 +287,45 @@ public class BoardManager : MonoBehaviour {
             else
                 wallTile = wallTiles[6];
         }
-            
+
         // West Wall
         else if (i == 0 && j == 3 && !directions[1])
-             wallTile = wallTiles[7];
-        
+            wallTile = wallTiles[7];
+
         if (wallTile == null)
             return;
 
         GameObject instance = Instantiate(wallTile, new Vector2(x * RoomWidth + i, y * RoomLength + j), Quaternion.identity) as GameObject;
         instance.transform.SetParent(board[x, y].transform);
+    }
+
+    void DrawFloor(int x, int y) {
+
+        TileInBox(x, y, 4, 4, 2, 3);
+
+        bool[] directions = GetDirection(x, y);
+
+        if (directions.Contains(true))
+            DrawHallFloor(x, y, directions);
+    }
+
+    void DrawHallFloor(int x, int y, bool[] directions) {
+
+        // North hallway
+        if (directions[0])
+            TileInBox(x, y, 4, 2, 2, 7);
+
+        // West hallway
+        if (directions[1])
+            TileInBox(x, y, 2, 3, 0, 3);
+
+        // East hallway
+        if (directions[2])
+            TileInBox(x, y, 2, 3, 6, 3);
+
+        // South hallway
+        if (directions[3])
+            TileInBox(x, y, 4, 3, 2, 0);
     }
 
     bool[] GetDirection(int x, int y) {
@@ -323,40 +353,10 @@ public class BoardManager : MonoBehaviour {
         }
     }
 
-    void RemoveWalls(Cell a, Cell b) {
-
-        int colDiff = (int)(a.position.x) - (int)(b.position.x);
-        int rowDiff = (int)(a.position.y) - (int)(b.position.y);
-
-        if (colDiff == 1) {
-
-            a.walls[1] = false;
-            b.walls[2] = false;
-        }
-
-        else if (colDiff == -1) {
-
-            a.walls[2] = false;
-            b.walls[1] = false;
-        }
-
-        if (rowDiff == -1) {
-
-            a.walls[0] = false;
-            b.walls[3] = false;
-        }
-
-        else if (rowDiff == 1) {
-
-            a.walls[3] = false;
-            b.walls[0] = false;
-        }
-    }
-
     public void SetupScene() {
 
         SetupGrid();
+        CreateMaze();
         DrawMaze();
-        BoardSetup();
     }
 }
