@@ -44,7 +44,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 36863f7813d5058468e8447ace336e42, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  startRoomIndex: 0
   floorTiles:
   - {fileID: 3631423498031765332, guid: 3d02ae40cef0e3d41a58ea3564d0018a, type: 3}
   wallTiles:
@@ -56,15 +55,8 @@ MonoBehaviour:
   - {fileID: 1091920886717700859, guid: e440b752aea60634d865f527928110be, type: 3}
   - {fileID: 8418010090923546841, guid: 415349c8fe76e0945aa41aa88fb3341d, type: 3}
   - {fileID: 1797392538373993602, guid: 49558d5c7e692884882b92179f3ceda0, type: 3}
-  startRoomCol: 
-  stack: []
-  currentRoom:
-    position: {x: 0, y: 0}
-    walls: 
-    visited: 0
-    room: 0
-  currentRoomIndex: 0
-  room: 0
+  rooms:
+  - {fileID: 6197391603972574428, guid: d85a2ee0ba2d9a04fbfff60b0e1bc4cf, type: 3}
 --- !u!114 &7259594239819781541
 MonoBehaviour:
   m_ObjectHideFlags: 0
