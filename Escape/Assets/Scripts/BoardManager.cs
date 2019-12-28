@@ -82,12 +82,15 @@ public class BoardManager : MonoBehaviour {
     private const int Cols = 6;
     private const int RoomLength = 9;
     private const int RoomWidth = 8;
+    private const int LargeRoomCount = Rows / 2;
 
     public GameObject[] floorTiles;
     public GameObject[] wallTiles;
+    public GameObject[] rooms;
     private GameObject[,] board;
     private Transform boardHolder;
     protected Cell[,] grid;
+    protected GameObject[] largeRooms;
 
     void SetupGrid() {
 
@@ -96,12 +99,16 @@ public class BoardManager : MonoBehaviour {
         for (int i = 0; i < Rows; i++)
             for (int j = 0; j < Cols; j++)
                 grid[i, j] = new Cell(i, j);
+
+        grid[0, 0].visited = true;
+        grid[0, 1].visited = true;
+        grid[1, 0].visited = true;
     }
 
-    void CreateMaze() {
+    void DesignMaze() {
         
         List<Cell> queue = new List<Cell>();
-        Cell currentRoom = grid[0, 0];
+        Cell currentRoom = grid[1, 1];
 
         do {
 
@@ -166,7 +173,7 @@ public class BoardManager : MonoBehaviour {
         for (int x = 0; x < Cols; x++) {
             for (int y = 0; y < Rows; y++) {
 
-                board[x, y] = new GameObject("Cell");
+                board[x, y] = new GameObject("Cell " + (x * Cols + y));
                 board[x, y].transform.position = new Vector2(x * Cols + RoomWidth / 2, y * Rows + RoomLength / 2);
                 board[x, y].transform.SetParent(boardHolder);
 
@@ -340,7 +347,7 @@ public class BoardManager : MonoBehaviour {
         return directions;
     }
 
-    void TileInBox(int x, int y, int length, int width, int lengthOffset, int widthOffset) {
+    void TileInBox(int x, int y, int length, int width, int lengthOffset, int widthOffset, bool reg = true) {
 
         for (int i = 0; i < length; i++) {
             for (int j = 0; j < width; j++) {
@@ -348,15 +355,90 @@ public class BoardManager : MonoBehaviour {
                 Vector2 position = new Vector2(x * RoomWidth + i + lengthOffset, y * RoomLength + j + widthOffset);
                 GameObject floorTile = floorTiles[Random.Range(0, floorTiles.Length)];
                 GameObject instance = Instantiate(floorTile, position, Quaternion.identity) as GameObject;
-                instance.transform.SetParent(board[x, y].transform);
+
+                if (reg)
+                    instance.transform.SetParent(board[x, y].transform);
+
+                else {
+
+                    GameObject room = new GameObject("Room");
+                    room.transform.position = new Vector2(x * Cols + 7.5f, y * Rows + 8.5f);
+                    room.transform.SetParent(boardHolder);
+                    instance.transform.SetParent(room.transform);
+                }
             }
+        }
+    }
+
+    void DrawRooms() {
+
+        largeRooms = new GameObject[LargeRoomCount];
+
+        // Starting room
+        DrawRoom(0, 0, 0);
+
+        // Remaining rooms
+        // for ()
+    }
+
+    void DrawRoom(int x, int y, int roomCount) {
+
+        Destroy(board[x, y]);
+        Destroy(board[x + 1, y]);
+        Destroy(board[x, y + 1]);
+        Destroy(board[x + 1, y + 1]);
+
+        GameObject room = rooms[0];
+        GameObject instance = Instantiate(room, new Vector2(x * RoomWidth, y * RoomLength), Quaternion.identity) as GameObject;
+        instance.transform.SetParent(boardHolder);
+
+        largeRooms[roomCount] = instance;
+
+        TileInBox(x, y, 12, 13, 2, 2, false);
+
+        ConnectWalls(x, y, largeRooms[roomCount]);
+    }
+
+    void ConnectWalls(int x, int y, GameObject room) {
+
+        // Top right, connect north
+        if (!grid[x + 1, y + 2].walls[3]) {
+
+            DestroyImmediate(room.transform.GetChild(0).GetChild(11).gameObject);
+            GameObject wallTile1 = wallTiles[4];
+            GameObject instance1 = Instantiate(wallTile1, new Vector2(8, 15), Quaternion.identity) as GameObject;
+            instance1.transform.SetParent(room.transform);
+
+            Destroy(room.transform.GetChild(0).GetChild(9).gameObject);
+            GameObject wallTile2 = wallTiles[3];
+            GameObject instance2 = Instantiate(wallTile2, new Vector2(14, 15), Quaternion.identity) as GameObject;
+            instance2.transform.SetParent(room.transform);
+
+            TileInBox(x + 1, y + 1, 4, 3, 2, 6, false);
+        }
+
+        // Top right, connect east
+        if (!grid[x + 2, y + 1].walls[1]) {
+
+            Destroy(room.transform.GetChild(0).GetChild(9).gameObject);
+            GameObject wallTile2 = wallTiles[1];
+            GameObject instance2 = Instantiate(wallTile2, new Vector2(14, 15), Quaternion.identity) as GameObject;
+            instance2.transform.SetParent(room.transform);
+
+            DestroyImmediate(room.transform.GetChild(0).GetChild(5).gameObject);
+            GameObject wallTile1 = wallTiles[0];
+            GameObject instance1 = Instantiate(wallTile1, new Vector2(14, 9), Quaternion.identity) as GameObject;
+            instance1.transform.SetParent(room.transform);
+
+            TileInBox(x + 1, y + 1, 2, 3, 6, 3, false);
         }
     }
 
     public void SetupScene() {
 
         SetupGrid();
-        CreateMaze();
+        DesignMaze();
         DrawMaze();
+        DrawRooms();
     }
 }
