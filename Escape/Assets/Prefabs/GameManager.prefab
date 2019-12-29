@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7259594239819781543}
-  - component: {fileID: 7259594239819781540}
+  - component: {fileID: 7739442318525374837}
   - component: {fileID: 7259594239819781541}
   m_Layer: 0
   m_Name: GameManager
@@ -32,7 +32,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &7259594239819781540
+--- !u!114 &7739442318525374837
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -44,19 +44,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 36863f7813d5058468e8447ace336e42, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  floorTiles:
-  - {fileID: 3631423498031765332, guid: 3d02ae40cef0e3d41a58ea3564d0018a, type: 3}
-  wallTiles:
-  - {fileID: 1163660733465294968, guid: 22c44f05f303c4642aa78f857a7f61b4, type: 3}
-  - {fileID: 8955278773922644746, guid: cd9d9e098cc253846a14ea3042d26dad, type: 3}
-  - {fileID: 4591668533025208246, guid: 77e04b9216f69c545b3340b1d728e997, type: 3}
-  - {fileID: 3813611868659212536, guid: 9ad4b0c94fa4d184c88316299d0589d2, type: 3}
-  - {fileID: 1231358192410807588, guid: cf015ca1b61bb1c4295882ce21065cf9, type: 3}
-  - {fileID: 1091920886717700859, guid: e440b752aea60634d865f527928110be, type: 3}
-  - {fileID: 8418010090923546841, guid: 415349c8fe76e0945aa41aa88fb3341d, type: 3}
-  - {fileID: 1797392538373993602, guid: 49558d5c7e692884882b92179f3ceda0, type: 3}
+  floorTiles: []
+  wallTiles: []
   rooms:
-  - {fileID: 6197391603972574428, guid: d85a2ee0ba2d9a04fbfff60b0e1bc4cf, type: 3}
+  - {fileID: 7417473221718846152, guid: ad0d444d6daae8d41a522953a863958d, type: 3}
+  - {fileID: 6277524084674277410, guid: cfcef9f2039427f49ada19ba70ca70b8, type: 3}
+  - {fileID: 6110520114280728010, guid: 33dda11056d9e5c4b805530076f6d7c1, type: 3}
+  - {fileID: 7536137574675793674, guid: 6c252d5223ea09240a9e1dc682aa0822, type: 3}
+  - {fileID: 1015419320711758248, guid: 400ffba72c553f34a815c404f9185d7b, type: 3}
+  - {fileID: 4387050255990169942, guid: 1b8e26070e2390d46aee7493f376d38c, type: 3}
+  - {fileID: 324775516378251412, guid: e37b599062c0c11468c6401e9dc15c34, type: 3}
+  - {fileID: 4054691933371131842, guid: 2960db7c1cb63c247a70660573e82f66, type: 3}
+  - {fileID: 5898553004486025172, guid: 83b3bf34979523542b60d31b7d1182af, type: 3}
+  - {fileID: 7930146378637962180, guid: 11455f9acc936554ebf0a6104d3ee03e, type: 3}
+  - {fileID: 2512092904601538966, guid: 576c493ecb8719245aa974c5b3ab664c, type: 3}
+  - {fileID: 8292566568350829528, guid: d2ed670ec9362bb4b9d13c3b707aece6, type: 3}
+  - {fileID: 7219385199221914726, guid: a6757ea7629474b429f7e0369ad5321b, type: 3}
+  - {fileID: 7897184837007609602, guid: dc29cf1eb61398943817e36cf722f3a3, type: 3}
+  - {fileID: 4323146039761187488, guid: 0488b90f68203364b99232bb72ab0f09, type: 3}
 --- !u!114 &7259594239819781541
 MonoBehaviour:
   m_ObjectHideFlags: 0

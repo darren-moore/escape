@@ -15,6 +15,7 @@ public class BoardManager : MonoBehaviour {
 
         public Vector2 position;
         public bool visited;
+        public bool room;
         public bool[] walls = new bool[4];
 
         public Cell(int x, int y) {
@@ -96,7 +97,6 @@ public class BoardManager : MonoBehaviour {
     private GameObject[,] board;
     private Transform boardHolder;
     protected Cell[,] grid;
-    protected GameObject[] largeRooms;
 
     void SetupGrid() {
 
@@ -105,25 +105,6 @@ public class BoardManager : MonoBehaviour {
         for (int i = 0; i < Rows; i++)
             for (int j = 0; j < Cols; j++)
                 grid[i, j] = new Cell(i, j);
-
-        /*
-        // Force maze generation algorithm to ignore starting room.
-        grid[0, 0].visited = true;
-        grid[0, 1].visited = true;
-        grid[1, 0].visited = true;
-        */
-
-        grid[0, 0].walls[0] = false;
-        grid[0, 0].walls[2] = false;
-
-        grid[0, 1].walls[3] = false;
-        grid[0, 1].walls[2] = false;
-
-        grid[1, 0].walls[1] = false;
-        grid[1, 0].walls[0] = false;
-
-        grid[1, 1].walls[3] = false;
-        grid[1, 1].walls[1] = false;
     }
 
     void DesignMaze() {
@@ -194,192 +175,71 @@ public class BoardManager : MonoBehaviour {
         for (int x = 0; x < Cols; x++) {
             for (int y = 0; y < Rows; y++) {
 
-                SetupCell(x, y);
-;
-                // Iterate through each tile in Cell.
-                for (int i = 0; i < RoomWidth; i++)
-                    for (int j = 0; j < RoomLength; j++)
-                        if (i < 2 || i > 5 || j < 3 || j > 5)
-                            DrawWall(x, y, i, j);
-
-                DrawFloor(x, y);
+                DrawCell(x, y);
             }
         }
     }
 
-    void SetupCell(int x, int y) {
+    void DrawCell(int x, int y) {
 
-        board[x, y] = new GameObject("Cell " + (x * Cols + y));
-        board[x, y].transform.position = new Vector2(x * Cols + RoomWidth / 2, y * Rows + RoomLength / 2);
-        board[x, y].transform.SetParent(boardHolder);
+        bool north = !grid[x, y].walls[0];
+        bool west = !grid[x, y].walls[1];
+        bool east = !grid[x, y].walls[2];
+        bool south = !grid[x, y].walls[3];
+        GameObject roomTile;
 
-        GameObject wallHolder = new GameObject("Walls");
-        wallHolder.transform.SetParent(board[x, y].transform);
+        if (north && !west && !east && !south)
+            roomTile = rooms[0];
 
-        GameObject floorHolder = new GameObject("Floors");
-        floorHolder.transform.SetParent(board[x, y].transform);
+        else if (!north && !west && east && !south)
+            roomTile = rooms[1];
+
+        else if (!north && !west && !east && south)
+            roomTile = rooms[2];
+
+        else if (!north && west && !east && !south)
+            roomTile = rooms[3];
+        
+        else if (!north && west && east && !south)
+            roomTile = rooms[4];
+
+        else if (north && !west && !east && south)
+            roomTile = rooms[5];
+
+        else if (north && !west && east && !south)
+            roomTile = rooms[6];
+
+        else if (!north && !west && east && south)
+            roomTile = rooms[7];
+
+        else if (!north && west && !east && south)
+            roomTile = rooms[8];
+
+        else if (north && west && !east && !south)
+            roomTile = rooms[9];
+
+        else if (north && west && east && !south)
+            roomTile = rooms[10];
+
+        else if (north && !west && east && south)
+            roomTile = rooms[11];
+
+        else if (!north && west && east && south)
+            roomTile = rooms[12];
+
+        else if (north && west && !east && south)
+            roomTile = rooms[13];
+
+        else
+            roomTile = rooms[14];
+
+        Vector2 position = new Vector2(x * RoomWidth, y * RoomLength);
+        board[x, y] = Instantiate(roomTile, position, Quaternion.identity) as GameObject;
+        board[x, y].name = "Cell " + (x * RoomWidth + y);
+        board[x, y].transform.SetParent(boardHolder.transform);
     }
 
-    void DrawWall(int x, int y, int i, int j) {
-
-        GameObject wallTile = null;
-
-        // [0]: North, [1]: West, [2]: East, [3]: South
-        bool[] directions = GetDirection(x, y);
-
-        // Northwest corner
-        if (i == 0 && j == 6) {
-
-            if (directions[0] && directions[1])
-                wallTile = wallTiles[4];
-
-            else if (directions[1] && directions[2])
-                wallTile = wallTiles[1];
-
-            else if (directions[0] && directions[3])
-                wallTile = wallTiles[7];
-
-            else if (directions[0])
-                wallTile = wallTiles[7];
-
-            else if (directions[1])
-                wallTile = wallTiles[1];
-
-            else
-                wallTile = wallTiles[0];
-        }
-
-        // North wall
-        else if ((i == 2 || i == 4) && j == 6 && !directions[0])
-            wallTile = wallTiles[1];
-
-        // Northeast corner
-        else if (i == 6 && j == 6) {
-
-            if (directions[0] && directions[2])
-                wallTile = wallTiles[6];
-
-            else if (directions[1] && directions[2])
-                wallTile = wallTiles[1];
-
-            else if (directions[0] && directions[3])
-                wallTile = wallTiles[3];
-
-            else if (directions[0])
-                wallTile = wallTiles[3];
-
-            else if (directions[2])
-                wallTile = wallTiles[1];
-
-            else
-                wallTile = wallTiles[2];
-        }
-
-        // East wall
-        else if (i == 6 && j == 3 && !directions[2])
-            wallTile = wallTiles[3];
-
-        // Southeast corner
-        else if (i == 6 && j == 0) {
-
-            if (directions[2] && directions[3])
-                wallTile = wallTiles[0];
-
-            else if (directions[1] && directions[2])
-                wallTile = wallTiles[5];
-
-            else if (directions[0] && directions[3])
-                wallTile = wallTiles[3];
-
-            else if (directions[2])
-                wallTile = wallTiles[5];
-
-            else if (directions[3])
-                wallTile = wallTiles[3];
-
-            else
-                wallTile = wallTiles[4];
-        }
-
-        // South Wall
-        else if ((i == 2 || i == 4) && j == 0 && !directions[3])
-            wallTile = wallTiles[5];
-
-        // Southwest Corner
-        else if (i == 0 && j == 0) {
-
-            if (directions[3] && directions[1])
-                wallTile = wallTiles[2];
-
-            else if (directions[1] && directions[2])
-                wallTile = wallTiles[5];
-
-            else if (directions[0] && directions[3])
-                wallTile = wallTiles[7];
-
-            else if (directions[3])
-                wallTile = wallTiles[7];
-
-            else if (directions[1])
-                wallTile = wallTiles[5];
-
-            else
-                wallTile = wallTiles[6];
-        }
-
-        // West Wall
-        else if (i == 0 && j == 3 && !directions[1])
-            wallTile = wallTiles[7];
-
-        if (wallTile == null)
-            return;
-
-        GameObject instance = Instantiate(wallTile, new Vector2(x * RoomWidth + i, y * RoomLength + j), Quaternion.identity) as GameObject;
-        instance.transform.SetParent(board[x, y].transform.GetChild(0));
-    }
-
-    void DrawFloor(int x, int y) {
-
-        TileInBox(x, y, 4, 4, 2, 3);
-
-        bool[] directions = GetDirection(x, y);
-
-        if (directions.Contains(true))
-            DrawHallFloor(x, y, directions);
-    }
-
-    void DrawHallFloor(int x, int y, bool[] directions) {
-
-        // North hallway
-        if (directions[0])
-            TileInBox(x, y, 4, 2, 2, 7);
-
-        // West hallway
-        if (directions[1])
-            TileInBox(x, y, 2, 3, 0, 3);
-
-        // East hallway
-        if (directions[2])
-            TileInBox(x, y, 2, 3, 6, 3);
-
-        // South hallway
-        if (directions[3])
-            TileInBox(x, y, 4, 3, 2, 0);
-    }
-
-    bool[] GetDirection(int x, int y) {
-
-        // [0]: North, [1]: West, [2]: East, [3]: South
-        bool[] directions = new bool[] { false, false, false, false };
-
-        for (int i = 0; i < 4; i++)
-            if (grid[x, y].walls[i] == false)
-                directions[i] = true;
-
-        return directions;
-    }
-
-    void TileInBox(int x, int y, int length, int width, int xOffset, int yOffset, bool reg = true, GameObject room = null) {
+    void TileInBox(int x, int y, int length, int width, int xOffset, int yOffset) {
 
         for (int i = 0; i < length; i++) {
             for (int j = 0; j < width; j++) {
@@ -387,43 +247,44 @@ public class BoardManager : MonoBehaviour {
                 Vector2 position = new Vector2(x * RoomWidth + i + xOffset, y * RoomLength + j + yOffset);
                 GameObject floorTile = floorTiles[Random.Range(0, floorTiles.Length)];
                 GameObject instance = Instantiate(floorTile, position, Quaternion.identity) as GameObject;
-
-                if (reg)
-                    instance.transform.SetParent(board[x, y].transform.GetChild(1));
-
-                else {
-
-                    room.transform.SetParent(boardHolder);
-                    instance.transform.SetParent(room.transform.GetChild(1));
-                }
+                instance.transform.SetParent(board[x, y].transform.GetChild(1));
             }
         }
     }
 
-    void DrawRoom(int x, int y, int roomCount) {
+    void DrawRooms() {
 
-        Destroy(board[x, y]);
-        Destroy(board[x + 1, y]);
-        Destroy(board[x, y + 1]);
-        Destroy(board[x + 1, y + 1]);
+        DrawRoom(0, 0);
 
-        GameObject room = rooms[0];
-        GameObject instance = Instantiate(room, new Vector2(x * RoomWidth, y * RoomLength), Quaternion.identity) as GameObject;
-        instance.transform.SetParent(boardHolder);
+        for (int i = 1; i < LargeRoomCount; i++) {
 
-        largeRooms[roomCount] = instance;
+            // Choose random (x, y) coordinates in grid
+            // DrawRoom(x, y);
+        }
+    }
 
-        GameObject floor = new GameObject("Other");
-        floor.transform.SetParent(largeRooms[roomCount].transform);
+    void DrawRoom(int x, int y) {
 
-        TileInBox(x, y, 12, 13, 2, 2, false, largeRooms[roomCount]);
+        grid[x, y].walls[0] = false;
+        grid[x, y].walls[2] = false;
 
+        grid[x, x + 1].walls[3] = false;
+        grid[x, x + 1].walls[2] = false;
+
+        grid[x + 1, y].walls[1] = false;
+        grid[x + 1, y].walls[0] = false;
+
+        grid[x + 1, x + 1].walls[3] = false;
+        grid[x + 1, x + 1].walls[1] = false;
+
+        // Destroy inner walls
 
     }
 
     public void SetupScene() {
 
         SetupGrid();
+        DrawRooms();
         DesignMaze();
         DrawMaze();
     }
