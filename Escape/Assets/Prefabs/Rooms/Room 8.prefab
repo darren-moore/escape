@@ -731,7 +731,7 @@ GameObject:
   - component: {fileID: 4054691933069335686}
   - component: {fileID: 4054691933069335687}
   m_Layer: 0
-  m_Name: Inner Wall
+  m_Name: SE Corner
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1130,7 +1130,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4054691933371131843}
   m_Layer: 0
-  m_Name: Room 2
+  m_Name: Room 8
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

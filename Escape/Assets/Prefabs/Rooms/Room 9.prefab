@@ -2026,7 +2026,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5101684180316003862}
   m_Layer: 0
-  m_Name: Room 3
+  m_Name: Room 9
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2139,7 +2139,7 @@ GameObject:
   - component: {fileID: 3031720137594407607}
   - component: {fileID: 7563305918226350858}
   m_Layer: 0
-  m_Name: Inner Corner
+  m_Name: SW Corner
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
