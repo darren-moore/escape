@@ -44,7 +44,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 36863f7813d5058468e8447ace336e42, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  floorTiles: []
+  floorTiles:
+  - {fileID: 3631423498031765332, guid: 3d02ae40cef0e3d41a58ea3564d0018a, type: 3}
   wallTiles: []
   rooms:
   - {fileID: 7417473221718846152, guid: ad0d444d6daae8d41a522953a863958d, type: 3}

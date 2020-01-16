@@ -411,7 +411,7 @@ GameObject:
   - component: {fileID: 7930146378560077499}
   - component: {fileID: 7930146378560077498}
   m_Layer: 0
-  m_Name: Inner Corner
+  m_Name: NW Corner
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -630,7 +630,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7930146378637962179}
   m_Layer: 0
-  m_Name: Room 4
+  m_Name: Room 10
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
